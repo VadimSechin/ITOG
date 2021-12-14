@@ -1,11 +1,8 @@
 import pygame
-from support import import_folder #импортируем функцию, которая работает с картинками.
+from support import import_folder
 
 class Player(pygame.sprite.Sprite):
-    """большой класс игрового персонажа. Присутствуют методы : """
-
     def __init__(self, pos, surface, create_jump_particles):
-        # создаёт кучу атрибутов
         super().__init__()
         self.import_character_assets()
         self.frame_index = 0
@@ -24,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 7
         self.direction = pygame.math.Vector2(0,0)
         self.gravity = 0.7
-        self.jump_speed = -14
+        self.jump_speed = -16
 
         #player status
         self.status = 'idle'
@@ -35,7 +32,6 @@ class Player(pygame.sprite.Sprite):
         self.on_right = False # colliding with the right wall
 
     def import_character_assets(self):
-        """ создаём словарь состояний игрока и соответствующие этому состоянию картинки. """
         character_path = './graphics/character/'
         self.animations = {'idle':[], 'run':[], 'jump':[], 'fall':[]}
 
@@ -44,13 +40,10 @@ class Player(pygame.sprite.Sprite):
             self.animations[animation] = import_folder(full_path)
 
     def import_dust_run_particles(self):
-        # создаём список картинок эффектов бега.
         self.dust_run_particles = import_folder('./graphics/character/dust_particles/run')
         
 
     def animate(self):
-        """ Куча проверок (взаимодейтсвия со стенами, полом и потолком). Перелистывание картинок и выбор нужного
-        состояния персонажа. """
         animation = self.animations[self.status]
 
         #loop over frame index
@@ -79,7 +72,7 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(midtop = self.rect.midtop)
 
     def run_dust_animation(self):
-        """ проверям нужно ли рисовать ту или иную картинку. Реализуем список картинок (см.ф-ию import_dust_run_particles) """
+        
         if self.status == 'run' and self.on_ground:
             self.dust_frame_index += self.dust_animation_speed
             if self.dust_frame_index >= len(self.dust_run_particles):
@@ -87,7 +80,7 @@ class Player(pygame.sprite.Sprite):
             dust_particle = self.dust_run_particles[int(self.dust_frame_index)]
 
             if self.facing_right:
-                #вручную вставляется высота и ширина пыли
+                #вручную вставляется высота и ширинв пыли
                 pos = self.rect.bottomleft - pygame.math.Vector2(6, 10)
                 self.display_surface.blit(dust_particle, pos)
             else:
@@ -96,7 +89,6 @@ class Player(pygame.sprite.Sprite):
                 self.display_surface.blit(flipped_dust_particle, pos)
 
     def get_status(self):
-        """ Проверка состояния персонажа (прыгает, падает или ему комфортно) """
         if self.direction.y < 0:
             self.status = 'jump'
         elif self.direction.y > 1:
@@ -125,16 +117,13 @@ class Player(pygame.sprite.Sprite):
             self.create_jump_particles(self.rect.midbottom )
 
     def apply_gravity(self):
-        """физическое падение"""
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
 
     def jump(self):
-        """прыжок"""
         self.direction.y = self.jump_speed
 
     def update(self):
-        """"изменение всего графического интерфейся"""
         self.get_input()
         self.get_status()
         self.animate()
