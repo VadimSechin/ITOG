@@ -259,7 +259,10 @@ class Level:
             player_center_y = self.player.sprite.rect.centery
             player_center_x = self.player.sprite.rect.centerx
             if enemy_top < player_center_y < enemy_bottom and enemy_x-200 < player_center_x < enemy_x+200:
-                enemy.speed = abs(enemy.speed)*((self.player.sprite.rect.centerx - enemy.rect.centerx) / (abs(self.player.sprite.rect.centerx - enemy.rect.centerx)))
+                if self.player.sprite.rect.centerx - enemy.rect.centerx != 0:
+                    enemy.speed = abs(enemy.speed)*((self.player.sprite.rect.centerx - enemy.rect.centerx) / (abs(self.player.sprite.rect.centerx - enemy.rect.centerx)))
+                elif self.player.sprite.rect.centerx - enemy.rect.centerx = 0:
+                    enemy.speed = 0
 
     def check_enemy_collisions(self):
         enemy_collisions = pygame.sprite.spritecollide(self.player.sprite, self.enemy_sprites, False)
