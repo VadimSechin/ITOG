@@ -250,6 +250,17 @@ class Level:
             for coin in collided_coins:
                 self.change_coins(coin.value)
 
+    def enemy_behavoir(self):
+
+        for enemy in self.enemy_sprites:
+            enemy_x = enemy.rect.centerx
+            enemy_top = enemy.rect.centery - 32
+            enemy_bottom = enemy.rect.centery + 32
+            player_center_y = self.player.sprite.rect.centery
+            player_center_x = self.player.sprite.rect.centerx
+            if enemy_top < player_center_y < enemy_bottom and enemy_x-200 < player_center_x < enemy_x+200:
+                enemy.speed = abs(enemy.speed)*((self.player.sprite.rect.centerx - enemy.rect.centerx) / (abs(self.player.sprite.rect.centerx - enemy.rect.centerx)))
+
     def check_enemy_collisions(self):
         enemy_collisions = pygame.sprite.spritecollide(self.player.sprite, self.enemy_sprites, False)
 
@@ -292,6 +303,7 @@ class Level:
         self.enemy_constraint_collision() # поворачивает противников на границе
         self.explosion_sprites.update(self.world_shift)
         self.explosion_sprites.draw(self.display_surface)
+        self.enemy_behavoir()
 
         # трава
         self.grass_sprites.draw(self.display_surface)
