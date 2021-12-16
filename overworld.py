@@ -29,7 +29,15 @@ class Node(pygame.sprite.Sprite):
             tinted_surf = self.image.copy()
             tinted_surf.fill('black', None, pygame.BLEND_RGBA_MULT)
             self.image.blit(tinted_surf, (0, 0))
-    
+
+class Shop(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        super().__init__()
+        self.pos = pos
+        self.image = pygame.image.load('./graphics/character/hat.png').convert_alpha()
+        self.rect = self.image.get_rect(center = pos)
+
+
 class Icon(pygame.sprite.Sprite):
     
     def __init__(self, pos):
@@ -42,13 +50,15 @@ class Icon(pygame.sprite.Sprite):
         self.rect.center = self.pos
 
 class Overworld:
-    def __init__(self, start_level, max_level, surface, create_level):
+    def __init__(self, start_level, max_level, surface, create_level, create_shop):
 
         # setup
         self.display_surface = surface
         self.max_level = max_level
         self.current_level = start_level
+        self.create_shop = create_shop
         self.create_level = create_level
+
 
         # movement logic
         self.moving = False
@@ -58,6 +68,7 @@ class Overworld:
         # sprites
         self.setup_nodes()
         self.setup_icon()
+        self.setup_shop()
         self.sky = Sky(8, 'overworld')
 
         # time
@@ -74,12 +85,20 @@ class Overworld:
             elif index >= self.max_level:
                 node_sprite = Node(node_data['node_pos'], 'locked', self.speed, node_data['node_graphics'])
 
-            self.nodes.add(node_sprite)        
+            self.nodes.add(node_sprite)
+
 
     def setup_icon(self):
         self.icon = pygame.sprite.GroupSingle()
         icon_sprite = Icon(self.nodes.sprites()[self.current_level].rect.center)
         self.icon.add(icon_sprite)
+        print(self.nodes.sprites()[self.current_level].rect.center)
+
+    def setup_shop(self):
+        self.shop = pygame.sprite.GroupSingle()
+        shop_sprite = Shop((50, 50))
+        self.shop.add(shop_sprite)
+
 
     def draw_paths(self):
         if self.max_level > 0: 
@@ -100,9 +119,6 @@ class Overworld:
 
             elif keys[pygame.K_SPACE]:
                 self.create_level(self.current_level)
-                
-            elif keys[pygame.K_s]:
-                print('you already in the STORE')
 
     def get_movement_data(self, target):
         """ Возвращает единичный вектор в направлении к следующему уровню """
@@ -132,11 +148,12 @@ class Overworld:
         self.input_timer()
         self.input()
         self.update_icon_pos()
-        self.icon.update()
         self.nodes.update()
+        self.icon.update()
 
         self.sky.draw(self.display_surface)
         self.draw_paths()
         self.nodes.draw(self.display_surface)
         self.icon.draw(self.display_surface)
+        self.shop.draw(self.display_surface)
         
