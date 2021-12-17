@@ -78,6 +78,7 @@ class Game:
         if self.status == 'shop':
             self.shop.run()
             self.ui.show_coins(self.coins)
+            self.ui.show_health(self.current_health, self.max_health)
         elif self.status == 'level':
             self.level.run()
             self.ui.show_health(self.current_health, self.max_health)
@@ -102,12 +103,12 @@ while True:
                 game.create_shop()
                 flag = -flag
         if (game.status == 'shop') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
-            if (60>event.pos[0]>40) and (40>event.pos[1]>20):
+            if (1135>event.pos[0]>1105) and (65>event.pos[1]>35):
                 game.create_overworld(0, game.max_level)
                 flag = -flag
 
         if (game.status == 'shop') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
-            if (260>event.pos[0]>240) and (260>event.pos[1]>240):
+            if (65>event.pos[0]>35) and (45>event.pos[1]>15):
                 game.buy_potion(5)
                 flag = -flag
 
