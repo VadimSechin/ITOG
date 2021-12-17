@@ -99,17 +99,17 @@ while True:
             pygame.quit()
             sys.exit()
         if (game.status == 'overworld') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
-            if (60>event.pos[0]>40) and (60>event.pos[1]>40):
+            if (70>event.pos[0]>30) and (70>event.pos[1]>30):
                 game.create_shop()
                 flag = -flag
         if (game.status == 'shop') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
-            if (1135>event.pos[0]>1105) and (65>event.pos[1]>35):
+            if (1140>event.pos[0]>1100) and (70>event.pos[1]>30):
                 game.create_overworld(0, game.max_level)
                 flag = -flag
 
         if (game.status == 'shop') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
-            if (65>event.pos[0]>35) and (45>event.pos[1]>15):
-                game.buy_potion(5)
+            if (270>event.pos[0]>230) and (270>event.pos[1]>230):
+                game.buy_potion(10)
                 flag = -flag
 
 

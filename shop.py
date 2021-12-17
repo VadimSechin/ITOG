@@ -40,8 +40,11 @@ class Shop:
 
     def setup_bg(self):
         self.bg = pygame.sprite.GroupSingle()
-        shop_sprite = Back_gr_for_item((250, 250))
+        shop_sprite = Back_gr_for_item((250, 255))
         self.bg.add(shop_sprite)
+
+
+
 
     def setup_back_btn(self):
         self.back_btn = pygame.sprite.GroupSingle()
@@ -58,6 +61,10 @@ class Shop:
         self.back_btn.draw(self.display_surface)
         self.bg.draw(self.display_surface)
         self.potion.draw(self.display_surface)
+        myfont = pygame.font.SysFont('Comic Sans MS', 30)
+        textsurface = myfont.render('Health potion (10)', False, (0, 0, 0))
+        self.display_surface.blit(textsurface, (170, 300))
+
 
 
 
