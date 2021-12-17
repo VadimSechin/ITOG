@@ -92,7 +92,6 @@ class Overworld:
         self.icon = pygame.sprite.GroupSingle()
         icon_sprite = Icon(self.nodes.sprites()[self.current_level].rect.center)
         self.icon.add(icon_sprite)
-        print(self.nodes.sprites()[self.current_level].rect.center)
 
     def setup_shop(self):
         self.shop = pygame.sprite.GroupSingle()

@@ -100,20 +100,15 @@ while True:
         if (game.status == 'overworld') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
             if (60>event.pos[0]>40) and (60>event.pos[1]>40):
                 game.create_shop()
-                print(game.status)
                 flag = -flag
         if (game.status == 'shop') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
             if (60>event.pos[0]>40) and (40>event.pos[1]>20):
                 game.create_overworld(0, game.max_level)
-                print(game.status)
-                print("2")
                 flag = -flag
 
         if (game.status == 'shop') and (event.type == pygame.MOUSEBUTTONDOWN) and (flag == 1):
             if (260>event.pos[0]>240) and (260>event.pos[1]>240):
                 game.buy_potion(5)
-                print(game.status)
-                print("2")
                 flag = -flag
 
 
