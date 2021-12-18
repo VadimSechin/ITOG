@@ -6,6 +6,9 @@ from tiles import AnimatedTile, StaticTile
 from random import choice, randint
 
 class Sky:
+    """
+    background sky
+    """
     def __init__(self, horison, style = 'level'):
         self.horison = horison
         self.top = pygame.image.load('./graphics/decoration/sky/sky_top.png').convert()
@@ -38,6 +41,12 @@ class Sky:
                 self.clouds.append((surface, rect))
 
     def draw(self, surface):
+        """
+        drawing objects
+
+        :param surface:
+        :return:
+        """
         for row in range(vertical_tile_number):
             y = row * tile_size
             if row < self.horison:
@@ -52,6 +61,9 @@ class Sky:
             for cloud in self.clouds:
                 surface.blit(cloud[0], cloud[1])
 class Water:
+    """
+    background water
+    """
     def __init__(self, top, level_width):
         
         water_start = - screen_width
@@ -66,10 +78,19 @@ class Water:
             self.water_sprites.add(sprite)
 
     def draw(self, surface, shift):
+        """
+        drawing objects
+        :param surface:
+        :param shift:
+        :return:
+        """
         self.water_sprites.update(shift)
         self.water_sprites.draw(surface)
     
 class Clouds:
+    """
+    background clouds
+    """
     def __init__(self, horison, level_width, cloud_number):
         cloud_surf_list = import_folder('./graphics/decoration/clouds')
         min_x = -screen_width
@@ -86,6 +107,12 @@ class Clouds:
             self.cloud_sprites.add(sprite)
 
     def draw(self, surface, shift):
+        """
+        drawing objects
+        :param surface:
+        :param shift:
+        :return:
+        """
         self.cloud_sprites.update(shift)
         self.cloud_sprites.draw(surface)
 

@@ -1,5 +1,7 @@
+"""
+Screen and block parameters
+"""
 screen_width = 1200
-
 
 tile_size = 64
 vertical_tile_number = 11

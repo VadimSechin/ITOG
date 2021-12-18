@@ -2,6 +2,9 @@ import pygame
 from support import import_folder
 
 class ParticleEffect(pygame.sprite.Sprite):
+    """
+    running and jumping effects
+    """
     def __init__(self, pos, type):
         super().__init__()
         self.frame_index = 0
@@ -16,6 +19,10 @@ class ParticleEffect(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = pos)
 
     def animate(self):
+        """
+        effect animation
+        :return:
+        """
         self.frame_index += self.animation_speed
         if self.frame_index >= len(self.frames):
             self.kill()
@@ -23,5 +30,10 @@ class ParticleEffect(pygame.sprite.Sprite):
             self.image = self.frames[int(self.frame_index)]
 
     def update(self, x_shift):
+        """
+        updating parameters
+        :param x_shift:
+        :return:
+        """
         self.animate()
         self.rect.x += x_shift 
