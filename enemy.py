@@ -4,7 +4,7 @@ from random import randint
 
 class Enemy(AnimatedTile):
     """
-    class of NPS enemy
+    class of NPC enemy
     """
     def __init__(self, size, x, y):
         super().__init__(size, x, y, './graphics/enemy/run')
