@@ -4,6 +4,24 @@ from support import import_folder
 class ParticleEffect(pygame.sprite.Sprite):
     """
     running and jumping effects
+
+    :parameters :
+    ------------
+
+    frame_index : int
+        Номер картинки
+
+    animation_speed : int
+        Скорость перелистывания кадров.
+
+    frames : list
+        Список картинок.
+
+    image : image
+        Картинка с каким-то номером.
+
+    rect : (int,int)
+        Центральные координаты картинки.
     """
     def __init__(self, pos, type):
         super().__init__()
@@ -21,7 +39,6 @@ class ParticleEffect(pygame.sprite.Sprite):
     def animate(self):
         """
         effect animation
-        :return:
         """
         self.frame_index += self.animation_speed
         if self.frame_index >= len(self.frames):
@@ -32,8 +49,7 @@ class ParticleEffect(pygame.sprite.Sprite):
     def update(self, x_shift):
         """
         updating parameters
-        :param x_shift:
-        :return:
+        :param x_shift: Скорость движения камеры.
         """
         self.animate()
         self.rect.x += x_shift 

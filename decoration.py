@@ -8,6 +8,30 @@ from random import choice, randint
 class Sky:
     """
     background sky
+
+    :parameters :
+    -----------
+
+    horizon : int
+        y-ковая координата линии горизонта.
+
+    top : image
+        Картинка верхней части неба.
+
+    bottom : image
+        Картинка нижней части неба.
+
+    middle : image
+        Картинка средней части неба (изображение горизонта).
+
+    style : str
+        Некоторый ключ в библиотеке.
+
+    palms : list
+        Список картинок пальм с соответствующими координатами.
+
+    clouds : list
+        Спикок картинок облаков с соответсвующими координатами.
     """
     def __init__(self, horison, style = 'level'):
         self.horison = horison
@@ -44,8 +68,7 @@ class Sky:
         """
         drawing objects
 
-        :param surface:
-        :return:
+        :param surface: Картинка, которую функция отображает.
         """
         for row in range(vertical_tile_number):
             y = row * tile_size
@@ -63,6 +86,11 @@ class Sky:
 class Water:
     """
     background water
+
+    :parameters :
+    -------------
+    water_sprites : Group
+        Спрайт-группа картинок воды.
     """
     def __init__(self, top, level_width):
         
@@ -80,9 +108,8 @@ class Water:
     def draw(self, surface, shift):
         """
         drawing objects
-        :param surface:
-        :param shift:
-        :return:
+        :param surface: Картинка, которую функция отображает.
+        :param shift: Скорость движения камеры.
         """
         self.water_sprites.update(shift)
         self.water_sprites.draw(surface)
@@ -90,6 +117,12 @@ class Water:
 class Clouds:
     """
     background clouds
+
+    :parameters :
+    --------------
+
+    cloud_sprites : Group
+        Спрайт-группа облаков
     """
     def __init__(self, horison, level_width, cloud_number):
         cloud_surf_list = import_folder('./graphics/decoration/clouds')
@@ -109,9 +142,8 @@ class Clouds:
     def draw(self, surface, shift):
         """
         drawing objects
-        :param surface:
-        :param shift:
-        :return:
+        :param surface: Картинка, которую функция отображает.
+        :param shift: Скорость движения камеры.
         """
         self.cloud_sprites.update(shift)
         self.cloud_sprites.draw(surface)

@@ -5,6 +5,18 @@ from random import randint
 class Enemy(AnimatedTile):
     """
     class of NPC enemy
+
+    :parameters :
+    ------------
+
+    rect.y : int
+        Положение врага по вертикали.
+
+    rect.x : int
+        Положение врага по горизотали.
+
+    speed : int
+        Скорость врага.
     """
     def __init__(self, size, x, y):
         super().__init__(size, x, y, './graphics/enemy/run')
@@ -13,15 +25,13 @@ class Enemy(AnimatedTile):
 
     def move(self):
         """
-
-        :return:
+        Перемещение врага.
         """
         self.rect.x += self.speed
 
     def reverse_image(self):
         """
         reversing enemy (image)
-        :return:
         """
         if self.speed > 0 :
             self.image = pygame.transform.flip(self.image, True, False)
@@ -29,15 +39,13 @@ class Enemy(AnimatedTile):
     def reverse(self):
         """
         reversing enemy (movement)
-        :return:
         """
         self.speed *= -1
 
     def update(self, shift):
         """
         updating parameters
-        :param shift:
-        :return:
+        :param shift: Скорость движения камеры.
         """
 
         self.rect.x += shift

@@ -4,6 +4,16 @@ from support import import_folder
 class Tile(pygame.sprite.Sprite):
     """
     block class (general)
+
+    :parameters:
+    ------------
+
+    image : surface
+        Квадрат с величиной size
+
+    rect : (int,int)
+        Координаты верхней левой вершины.
+
     """
     def __init__(self, size, x, y):
         super().__init__()
@@ -13,14 +23,19 @@ class Tile(pygame.sprite.Sprite):
     def update(self, shift):
         """
         updating parametres
-        :param shift:
-        :return:
+        :param shift: Скорость движения камеры.
         """
         self.rect.x += shift
         
 class StaticTile(Tile):
     """
     fixed block class
+
+    :parameter:
+    -----------
+
+    image : image
+        Картинка неподвижного игрового блока.
     """
     def __init__(self, size, x, y, surface):
         super().__init__(size, x, y)
@@ -28,7 +43,10 @@ class StaticTile(Tile):
     
 class Crate(StaticTile):
     """
-    fixed box class
+    Box class
+
+    rect : (int,int)
+        Координаты левой нижней вершины коробки.
     """
     def __init__(self, size, x, y):
         super().__init__(size, x, y, pygame.image.load('./graphics/terrain/crate.png').convert_alpha())
@@ -38,6 +56,18 @@ class Crate(StaticTile):
 class AnimatedTile(Tile):
     """
     class of moving elements of the level
+
+    :parameters:
+    ------------
+
+    frames : list
+        Набор картинок движущихся (колеблющихся) объектов
+
+    frame index : int
+        Номер картинки
+
+    image : image
+        Изображение соответсвующего номера
     """
     def __init__(self, size, x, y, path):
         super().__init__(size, x, y)
@@ -48,7 +78,7 @@ class AnimatedTile(Tile):
     def animate(self):
         """
         elements animation
-        :return:
+        Перелистываем картинки
         """
         self.frame_index += 0.15
         if self.frame_index >= len(self.frames):
@@ -58,8 +88,7 @@ class AnimatedTile(Tile):
     def update(self, shift):
         """
         updating parameters
-        :param shift:
-        :return:
+        :param shift: Скорость движения камеры.
         """
         self.rect.x += shift
         self.animate()
@@ -67,6 +96,15 @@ class AnimatedTile(Tile):
 class Coin(AnimatedTile):
     """
     coins class
+
+    :parameters:
+    -------------
+
+    rect : (int,int)
+        Координаты центра изображения монетки.
+
+    value : int
+        Номинал монетки.
     """
     def __init__(self, size, x, y, path, value):
         super().__init__(size, x, y, path)
@@ -78,10 +116,16 @@ class Coin(AnimatedTile):
 class Palm(AnimatedTile):
     """
     palm class
+
+    :parameters :
+    -------------
+
+    rect : (int,int)
+        Координаты левой верхней вершины.
     """
     def __init__(self, size, x, y, path, offset):
         super().__init__(size, x, y, path)
-        offset_y = y - offset
+        offset_y = y - offset # Разность нижней границы прямоугольника (tile) и картинки (image)
         self.rect.topleft = (x, offset_y)
 
 
