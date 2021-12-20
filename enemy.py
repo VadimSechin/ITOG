@@ -13,7 +13,7 @@ class Enemy(AnimatedTile):
 
     def move(self):
         """
-        enemy movement (general)
+
         :return:
         """
         self.rect.x += self.speed
@@ -39,6 +39,7 @@ class Enemy(AnimatedTile):
         :param shift:
         :return:
         """
+
         self.rect.x += shift
         self.animate()
         self.move()
