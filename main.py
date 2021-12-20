@@ -123,7 +123,7 @@ clock = pygame.time.Clock()
 game = Game()
 
 # running cicle
-flag = 1  # flag to prevent issues with exit from th eshop
+flag = 1  # flag to prevent issues with exit from the shop
 while True:
     for event in pygame.event.get():
         flag = 1
