@@ -3,6 +3,60 @@ from support import import_folder
 from math import sin
 
 class Player(pygame.sprite.Sprite):
+    """ Класс Player используется для создания, анимации,
+        обработки игровых процессов связанных с игровым персонажем
+
+        Основное применение - создание игровых спрайтов, их перемещение
+
+    Atributes
+
+    ---------
+    frame_index : int
+        Номер картинки
+    animation_speed : float
+        Скорость перелистывания картинок анимации
+    image : image
+        Картинка соответствующего номера
+    rect : (int, int)
+        Координата верхнего левого угла изображения персонажа
+    dust_frame_index : int
+        Номер картинки
+    create_jump_particles : function
+        Функция создающая эффект при прыжке 
+    speed : int
+        скорость движения персонажа
+    direction : (int, int)
+        касательный вектор движения персонажа 
+    jump_speed : int
+        начальная скорость прыжка
+    collision_rect : (int, int)
+        Координаты левого верхнего угла прямоугольника, отвечающего за все коллизии
+    status : str
+        Состояние персонажа ('idle', 'run', 'jump', 'fall')
+    facing_right : bull
+        Утверждение является ли персонаж повернут направо
+    on_ground : bull
+        Утверждение стоит ли персонаж на игровых спрайтах
+    on_ceiling : bull
+        Утверждение касается ли персонаж головой игровых спрайтов
+    on_left : bull
+        Утверждение упирается ли персонаж в стену слева 
+    on_right : bull
+        Утверждение упирается ли персонаж в стену справа
+    change_health : function
+        Функция, изменяющая количество здоровья
+    invincible : bull
+        Утверждение является ли персонаж неуязвимым
+    invincibility_duration : int
+        Количество циклов игры без возможности получить урон
+    hurt_time : int
+        Момент времени в который персонаж получил урон
+    jump_sound : mp3_file
+        Музыка прыжка
+    hit_sound : mp3_file
+        Музыка получения урона
+        """
+    
     def __init__(self, pos, surface, create_jump_particles, change_health):
         super().__init__()
         self.import_character_assets()
@@ -45,6 +99,8 @@ class Player(pygame.sprite.Sprite):
         self.hit_sound = pygame.mixer.Sound('./audio/effects/hit.wav')
         
     def import_character_assets(self):
+        """ Метод, который заполняет библиотеку animations """
+        
         character_path = './graphics/character/'
         self.animations = {'idle':[], 'run':[], 'jump':[], 'fall':[]}
 
@@ -53,10 +109,15 @@ class Player(pygame.sprite.Sprite):
             self.animations[animation] = import_folder(full_path)
 
     def import_dust_run_particles(self):
+        """ Метод, который создает список картинок эффектов бега"""
+        
         self.dust_run_particles = import_folder('./graphics/character/dust_particles/run')
         
 
     def animate(self):
+        """ Метод, который анимирует(перелистывает картинки)
+            персонажа в зависимости от ситуации"""
+        
         animation = self.animations[self.status]
 
         #loop over frame index
@@ -91,6 +152,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def run_dust_animation(self):
+        """ Метод, который создает эффект бега"""
         
         if self.status == 'run' and self.on_ground:
             self.dust_frame_index += self.dust_animation_speed
@@ -108,6 +170,8 @@ class Player(pygame.sprite.Sprite):
                 self.display_surface.blit(flipped_dust_particle, pos)
 
     def get_status(self):
+        """ Метод, который проверяет состояние персонажа"""
+        
         if self.direction.y < 0:
             self.status = 'jump'
         elif self.direction.y > 1:
@@ -119,7 +183,8 @@ class Player(pygame.sprite.Sprite):
                 self.status = 'idle'           
 
     def get_input(self):
-        """ Обработка событий """
+        """ Метод, который производит обработку всех внешних событий"""
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
@@ -136,14 +201,20 @@ class Player(pygame.sprite.Sprite):
             self.create_jump_particles(self.rect.midbottom )
 
     def apply_gravity(self):
+        """ Метод, который задает гравитацию"""
+        
         self.direction.y += self.gravity
         self.collision_rect.y += self.direction.y
 
     def jump(self):
+        """ Метод, который создает прыжок персонажа"""
+        
         self.direction.y = self.jump_speed
         self.jump_sound.play()
 
     def get_damage(self):
+        """ Метод, который обрабатывает получение урона """
+        
         if not self.invincible:
             self.hit_sound.play()
             self.change_health(-1)
@@ -151,17 +222,23 @@ class Player(pygame.sprite.Sprite):
             self.hurt_time = pygame.time.get_ticks()
 
     def invincibility_timer(self):
+        """ Метод, который создает и снимает эффект неуязвимости """
+        
         if self.invincible:
             current_time = pygame.time.get_ticks()
             if current_time - self.hurt_time >= self.invincibility_duration:
                 self.invincible = False
 
     def wave_value(self):
+        """ Метод, который изменяет прозрачность волнообразно """
+        
         value = sin(pygame.time.get_ticks())
         if value >= 0: return 255
         else: return 0
 
     def update(self):
+        """ Метод, который обрабатывает изменения за цикл """
+        
         self.get_input()
         self.get_status()
         self.animate()
