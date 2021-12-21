@@ -2,6 +2,7 @@ import pygame
 from support import import_folder
 from math import sin
 
+
 class Player(pygame.sprite.Sprite):
     """ Класс Player используется для создания, анимации,
         обработки игровых процессов связанных с игровым персонажем
@@ -56,36 +57,36 @@ class Player(pygame.sprite.Sprite):
     hit_sound : mp3_file
         Музыка получения урона
         """
-    
+
     def __init__(self, pos, surface, create_jump_particles, change_health):
         super().__init__()
         self.import_character_assets()
         self.frame_index = 0
         self.animation_speed = 0.15
         self.image = self.animations['idle'][self.frame_index]
-        self.rect = self.image.get_rect(topleft = pos)
+        self.rect = self.image.get_rect(topleft=pos)
 
-        #dust particles
+        # dust particles
         self.import_dust_run_particles()
         self.dust_frame_index = 0
         self.dust_animation_speed = 0.15
         self.display_surface = surface
         self.create_jump_particles = create_jump_particles
-        
-        #player movement
+
+        # player movement
         self.speed = 7
-        self.direction = pygame.math.Vector2(0,0)
+        self.direction = pygame.math.Vector2(0, 0)
         self.gravity = 0.7
         self.jump_speed = -16
         self.collision_rect = pygame.Rect(self.rect.topleft, (50, self.rect.height))
 
-        #player status
+        # player status
         self.status = 'idle'
         self.facing_right = True
         self.on_ground = False
         self.on_ceiling = False
-        self.on_left = False # colliding with the left wall
-        self.on_right = False # colliding with the right wall
+        self.on_left = False  # colliding with the left wall
+        self.on_right = False  # colliding with the right wall
 
         # health management
         self.change_health = change_health
@@ -97,12 +98,12 @@ class Player(pygame.sprite.Sprite):
         self.jump_sound = pygame.mixer.Sound('./audio/effects/jump.wav')
         self.jump_sound.set_volume(0.5)
         self.hit_sound = pygame.mixer.Sound('./audio/effects/hit.wav')
-        
+
     def import_character_assets(self):
         """ Метод, который заполняет библиотеку animations """
-        
+
         character_path = './graphics/character/'
-        self.animations = {'idle':[], 'run':[], 'jump':[], 'fall':[]}
+        self.animations = {'idle': [], 'run': [], 'jump': [], 'fall': []}
 
         for animation in self.animations.keys():
             full_path = character_path + animation
@@ -110,17 +111,16 @@ class Player(pygame.sprite.Sprite):
 
     def import_dust_run_particles(self):
         """ Метод, который создает список картинок эффектов бега"""
-        
+
         self.dust_run_particles = import_folder('./graphics/character/dust_particles/run')
-        
 
     def animate(self):
         """ Метод, который анимирует(перелистывает картинки)
             персонажа в зависимости от ситуации"""
-        
+
         animation = self.animations[self.status]
 
-        #loop over frame index
+        # loop over frame index
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             self.frame_index = 0
@@ -139,21 +139,20 @@ class Player(pygame.sprite.Sprite):
             self.image.set_alpha(alpha)
         else:
             self.image.set_alpha(255)
-            
-        #set the rect
-        if self.on_ground and self.on_right:
-            self.rect = self.image.get_rect(bottomright = self.rect.bottomright)
-        elif self.on_ground and self.on_left:
-            self.rect = self.image.get_rect(bottomleft = self.rect.bottomleft)
-        elif self.on_ground:
-            self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
-        elif self.on_ceiling and self.on_right:
-            self.rect = self.image.get_rect(topright = self.rect.topright)
 
+        # set the rect
+        if self.on_ground and self.on_right:
+            self.rect = self.image.get_rect(bottomright=self.rect.bottomright)
+        elif self.on_ground and self.on_left:
+            self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
+        elif self.on_ground:
+            self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
+        elif self.on_ceiling and self.on_right:
+            self.rect = self.image.get_rect(topright=self.rect.topright)
 
     def run_dust_animation(self):
         """ Метод, который создает эффект бега"""
-        
+
         if self.status == 'run' and self.on_ground:
             self.dust_frame_index += self.dust_animation_speed
             if self.dust_frame_index >= len(self.dust_run_particles):
@@ -161,7 +160,7 @@ class Player(pygame.sprite.Sprite):
             dust_particle = self.dust_run_particles[int(self.dust_frame_index)]
 
             if self.facing_right:
-                #вручную вставляется высота и ширинв пыли
+                # вручную вставляется высота и ширинв пыли
                 pos = self.rect.bottomleft - pygame.math.Vector2(6, 10)
                 self.display_surface.blit(dust_particle, pos)
             else:
@@ -171,7 +170,7 @@ class Player(pygame.sprite.Sprite):
 
     def get_status(self):
         """ Метод, который проверяет состояние персонажа"""
-        
+
         if self.direction.y < 0:
             self.status = 'jump'
         elif self.direction.y > 1:
@@ -180,7 +179,7 @@ class Player(pygame.sprite.Sprite):
             if self.direction.x != 0:
                 self.status = 'run'
             else:
-                self.status = 'idle'           
+                self.status = 'idle'
 
     def get_input(self):
         """ Метод, который производит обработку всех внешних событий"""
@@ -198,23 +197,23 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_SPACE] and self.on_ground:
             self.jump()
-            self.create_jump_particles(self.rect.midbottom )
+            self.create_jump_particles(self.rect.midbottom)
 
     def apply_gravity(self):
         """ Метод, который задает гравитацию"""
-        
+
         self.direction.y += self.gravity
         self.collision_rect.y += self.direction.y
 
     def jump(self):
         """ Метод, который создает прыжок персонажа"""
-        
+
         self.direction.y = self.jump_speed
         self.jump_sound.play()
 
     def get_damage(self):
         """ Метод, который обрабатывает получение урона """
-        
+
         if not self.invincible:
             self.hit_sound.play()
             self.change_health(-1)
@@ -223,7 +222,7 @@ class Player(pygame.sprite.Sprite):
 
     def invincibility_timer(self):
         """ Метод, который создает и снимает эффект неуязвимости """
-        
+
         if self.invincible:
             current_time = pygame.time.get_ticks()
             if current_time - self.hurt_time >= self.invincibility_duration:
@@ -231,17 +230,18 @@ class Player(pygame.sprite.Sprite):
 
     def wave_value(self):
         """ Метод, который изменяет прозрачность волнообразно """
-        
+
         value = sin(pygame.time.get_ticks())
-        if value >= 0: return 255
-        else: return 0
+        if value >= 0:
+            return 255
+        else:
+            return 0
 
     def update(self):
         """ Метод, который обрабатывает изменения за цикл """
-        
+
         self.get_input()
         self.get_status()
         self.animate()
         self.run_dust_animation()
         self.invincibility_timer()
-        

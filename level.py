@@ -69,7 +69,7 @@ class Level:
         объект класа Clouds, отображает облака
 
     """
-    
+
     def __init__(self, current_level, surface, create_overworld, change_coins, change_health):
         # general setup
         self.display_surface = surface
@@ -85,7 +85,7 @@ class Level:
         self.current_level = current_level
         level_data = levels[self.current_level]
         self.new_max_level = level_data['unlock']
-        
+
         # player setup
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -94,14 +94,14 @@ class Level:
 
         # user interface
         self.change_coins = change_coins
-        
+
         # dust
         self.dust_sprite = pygame.sprite.GroupSingle()
         self.player_on_ground = False
 
         # explosion particles
         self.explosion_sprites = pygame.sprite.Group()
-        
+
         # terrain setup
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
@@ -139,7 +139,6 @@ class Level:
         level_width = len(terrain_layout[0]) * tile_size
         self.water = Water(screen_height - 20, level_width)
         self.clouds = Clouds(400, level_width, 50)
-        
 
     def create_tile_group(self, layout, type):
         """ Метод, который из обработанного csv файла получает координаты спрайтов,
@@ -148,7 +147,7 @@ class Level:
 
             return :
             Группа игровых спрайтов"""
-        
+
         sprite_group = pygame.sprite.Group()
 
         for row_index, row in enumerate(layout):
@@ -160,8 +159,8 @@ class Level:
                     if type == 'terrain':
                         terrain_tile_list = import_cut_graphics('./graphics/terrain/terrain_tiles.png')
                         tile_surface = terrain_tile_list[int(value)]
-                        sprite = StaticTile(tile_size, x, y, tile_surface) 
-                        
+                        sprite = StaticTile(tile_size, x, y, tile_surface)
+
                     if type == 'grass':
                         grass_tile_list = import_cut_graphics('./graphics/decoration/grass/grass.png')
                         tile_surface = grass_tile_list[int(value)]
@@ -176,13 +175,13 @@ class Level:
                             sprite = Coin(tile_size, x, y, './graphics/coins/gold', 5)
                         if value == '1':
                             sprite = Coin(tile_size, x, y, './graphics/coins/silver', 1)
-                            
+
                     if type == 'fg palms':
-                        if value == '4' or value == '5' or value == '6' or value == '7' :
+                        if value == '4' or value == '5' or value == '6' or value == '7':
                             sprite = Palm(tile_size, x, y, './graphics/terrain/palm_small', 38)
-                        if value == '0' or value == '1' or value == '2' or value == '3' :
+                        if value == '0' or value == '1' or value == '2' or value == '3':
                             sprite = Palm(tile_size, x, y, './graphics/terrain/palm_large', 64)
-                        
+
                     if type == 'bg palms':
                         sprite = Palm(tile_size, x, y, './graphics/terrain/palm_bg', 64)
 
@@ -195,9 +194,9 @@ class Level:
                     if type == 'player':
                         if value == '0':
                             sprite = Tile(tile_size, x, y)
-                       
-                    sprite_group.add(sprite)   
-            
+
+                    sprite_group.add(sprite)
+
         return sprite_group
 
     def enemy_constraint_collision(self):
@@ -206,7 +205,7 @@ class Level:
         for enemy in self.enemy_sprites.sprites():
             if pygame.sprite.spritecollide(enemy, self.constraint_sprites, False):
                 enemy.reverse()
-                
+
     def create_jump_particles(self, pos):
         """ Метод, который создает спрайт эффект прыжка персонажа """
 
@@ -222,8 +221,8 @@ class Level:
 
         player = self.player.sprite
         player.collision_rect.x += player.direction.x * player.speed
-        collidable_sprites = self.terrain_sprites.sprites() + self. crate_sprites.sprites() + self.fg_palm_sprites.sprites()
-        for sprite in collidable_sprites :
+        collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
+        for sprite in collidable_sprites:
             if sprite.rect.colliderect(player.collision_rect):
                 if player.direction.x < 0:
                     player.collision_rect.left = sprite.rect.right
@@ -233,10 +232,10 @@ class Level:
                     player.collision_rect.right = sprite.rect.left
                     player.on_right = True
                     self.current_x = player.collision_rect.right
-                    
-        if player.on_left and (player.collision_rect.left < self.current_x or player.direction.x >=0):
+
+        if player.on_left and (player.collision_rect.left < self.current_x or player.direction.x >= 0):
             player.on_left = False
-        elif player.on_right and (player.collision_rect.right > self.current_x or player.direction.x <=0):
+        elif player.on_right and (player.collision_rect.right > self.current_x or player.direction.x <= 0):
             player.on_right = False
 
     def get_player_on_ground(self):
@@ -249,7 +248,7 @@ class Level:
 
     def create_landing_dust(self):
         """ Метод, создающий спрайт эффекта приземления """
-        
+
         if not self.player_on_ground and self.player.sprite.on_ground and not self.dust_sprite.sprites():
             if self.player.sprite.facing_right:
                 offset = pygame.math.Vector2(10, 20)
@@ -257,13 +256,13 @@ class Level:
                 offset = pygame.math.Vector2(-10, 20)
             fall_dust_particle = ParticleEffect(self.player.sprite.rect.midbottom - offset, 'land')
             self.dust_sprite.add(fall_dust_particle)
-                
+
     def vertical_movement_collision(self):
         """ Метод, описывающий все вертикальное движение персонажа """
-        
+
         player = self.player.sprite
         player.apply_gravity()
-        collidable_sprites = self.terrain_sprites.sprites() + self. crate_sprites.sprites() + self.fg_palm_sprites.sprites()
+        collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
         for sprite in collidable_sprites:
             if sprite.rect.colliderect(player.collision_rect):
                 if player.direction.y < 0:
@@ -277,7 +276,7 @@ class Level:
 
         if player.on_ground and player.direction.y < 0 or player.direction.y > 1:
             player.on_ground = False
-        
+
     def player_setup(self, layout, change_health):
         """ Метод, создающий спрайт игрового персонажа и точку завершения уровня
 
@@ -289,32 +288,32 @@ class Level:
         change_health : function
             проверяет количество собранных монет
         """
-        
+
         for row_index, row in enumerate(layout):
             for column_index, value in enumerate(row):
                 x = column_index * tile_size
                 y = row_index * tile_size
                 if value == '0':
                     sprite = Player((x, y), self.display_surface, self.create_jump_particles, change_health)
-                    self.player.add(sprite) 
+                    self.player.add(sprite)
                 if value == '1':
                     hat_surface = pygame.image.load('./graphics/character/hat.png').convert_alpha()
                     sprite = StaticTile(tile_size, x, y, hat_surface)
                     self.goal.add(sprite)
-                    
+
     def scroll_x(self):
         """ Метод, изменяющий скорость движение камеры,
             в засисимости от положения и скорости игрового персонажа """
-        
+
         player = self.player.sprite
         player_x = player.rect.centerx
-        direction_x  = player.direction.x
+        direction_x = player.direction.x
 
-        if player_x < 3*screen_width//7  and direction_x < 0:
+        if player_x < 3 * screen_width // 7 and direction_x < 0:
             self.world_shift = 7
             player.speed = 0
-        
-        elif player_x > 4*screen_width//7 and direction_x > 0:
+
+        elif player_x > 4 * screen_width // 7 and direction_x > 0:
             self.world_shift = -7
             player.speed = 0
 
@@ -331,13 +330,13 @@ class Level:
     def check_win(self):
         """ Метод, создающий карту уровней и открывающий следующий
             уровнень при попадании персонажа в точку заверщения уровня """
-        
+
         if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
             self.create_overworld(self.current_level, self.new_max_level)
 
     def check_coin_collisions(self):
         """ Метод, который считает количество собранных монет """
-        
+
         collided_coins = pygame.sprite.spritecollide(self.player.sprite, self.coin_sprites, True)
         if collided_coins:
             self.coin_sound.play()
@@ -346,21 +345,21 @@ class Level:
 
     def enemy_ai_behaviour(self):
         """ Метод, который заставляет врагов следовать за персонажем если он находится неподалеку """
-        
+
         for enemy in self.enemy_sprites:
             enemy_x = enemy.rect.centerx
             enemy_top = enemy.rect.centery - 32
             enemy_bottom = enemy.rect.centery + 32
             player_center_y = self.player.sprite.rect.centery
             player_center_x = self.player.sprite.rect.centerx
-            if enemy_top < player_center_y < enemy_bottom and enemy_x-200 < player_center_x < enemy_x+200:
+            if enemy_top < player_center_y < enemy_bottom and enemy_x - 200 < player_center_x < enemy_x + 200:
                 if self.player.sprite.rect.centerx - enemy.rect.centerx != 0:
-                    enemy.speed = abs(enemy.speed)*((self.player.sprite.rect.centerx - enemy.rect.centerx) / (abs(self.player.sprite.rect.centerx - enemy.rect.centerx)))
-                
+                    enemy.speed = abs(enemy.speed) * ((self.player.sprite.rect.centerx - enemy.rect.centerx) / (
+                        abs(self.player.sprite.rect.centerx - enemy.rect.centerx)))
 
     def check_enemy_collisions(self):
         """ Метод, обрабатывающий все столкновения персонажа и врагов """
-        
+
         enemy_collisions = pygame.sprite.spritecollide(self.player.sprite, self.enemy_sprites, False)
 
         if enemy_collisions:
@@ -376,13 +375,14 @@ class Level:
                     enemy.kill()
                 else:
                     self.player.sprite.get_damage()
+
     def run(self):
         """ Метод, который запускает уровень """
 
         # небо
         self.sky.draw(self.display_surface)
         self.clouds.draw(self.display_surface, self.world_shift)
-        
+
         # пальмы заднего вида
         self.bg_palm_sprites.draw(self.display_surface)
         self.bg_palm_sprites.update(self.world_shift)
@@ -394,12 +394,12 @@ class Level:
         # ящик
         self.crate_sprites.draw(self.display_surface)
         self.crate_sprites.update(self.world_shift)
-        
+
         # NPC - пассивые противники
         self.enemy_sprites.draw(self.display_surface)
         self.enemy_sprites.update(self.world_shift)
-        self.constraint_sprites.update(self.world_shift) # ограничения для NPC
-        self.enemy_constraint_collision() # поворачивает противников на границе
+        self.constraint_sprites.update(self.world_shift)  # ограничения для NPC
+        self.enemy_constraint_collision()  # поворачивает противников на границе
         self.explosion_sprites.update(self.world_shift)
         self.explosion_sprites.draw(self.display_surface)
         self.enemy_ai_behaviour()
@@ -423,11 +423,11 @@ class Level:
         # спрайты игрока
         self.player.update()
         self.horisontal_movement_collision()
-        
+
         self.get_player_on_ground()
         self.vertical_movement_collision()
         self.create_landing_dust()
-        
+
         self.scroll_x()
         self.player.draw(self.display_surface)
         self.goal.draw(self.display_surface)
@@ -441,12 +441,3 @@ class Level:
 
         # океан
         self.water.draw(self.display_surface, self.world_shift)
-
-
-        
-
-        
-
-
-        
-        

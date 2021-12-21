@@ -3,6 +3,7 @@ from os import walk
 from csv import reader
 from settings import tile_size
 
+
 def import_folder(path):
     """ из данных создает лист изображений объекта """
     surface_list = []
@@ -13,15 +14,17 @@ def import_folder(path):
             surface_list.append(image_surf)
     return surface_list
 
+
 def import_csv_layout(path):
     """ Преобразует csv файл в лист листов значений id объектов """
     terrain_map = []
     with open(path) as map:
-        level = reader(map, delimiter = ',')
+        level = reader(map, delimiter=',')
         for row in level:
             terrain_map.append(list(row))
         return terrain_map
-    
+
+
 def import_cut_graphics(path):
     """ Разделение картинки на квадраты """
     surface = pygame.image.load(path).convert_alpha()
@@ -34,7 +37,7 @@ def import_cut_graphics(path):
         for column in range(tile_num_x):
             x = column * tile_size
             y = row * tile_size
-            new_surf = pygame.Surface((tile_size, tile_size), flags = pygame.SRCALPHA)
+            new_surf = pygame.Surface((tile_size, tile_size), flags=pygame.SRCALPHA)
             new_surf.blit(surface, (0, 0), pygame.Rect(x, y, tile_size, tile_size))
             cut_tiles.append(new_surf)
     return cut_tiles

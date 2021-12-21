@@ -1,6 +1,7 @@
 import pygame
 from support import import_folder
 
+
 class ParticleEffect(pygame.sprite.Sprite):
     """
     running and jumping effects
@@ -23,6 +24,7 @@ class ParticleEffect(pygame.sprite.Sprite):
     rect : (int,int)
         Центральные координаты картинки.
     """
+
     def __init__(self, pos, type):
         super().__init__()
         self.frame_index = 0
@@ -34,7 +36,7 @@ class ParticleEffect(pygame.sprite.Sprite):
         if type == 'explosion':
             self.frames = import_folder('./graphics/enemy/explosion')
         self.image = self.frames[self.frame_index]
-        self.rect = self.image.get_rect(center = pos)
+        self.rect = self.image.get_rect(center=pos)
 
     def animate(self):
         """
@@ -52,4 +54,4 @@ class ParticleEffect(pygame.sprite.Sprite):
         :param x_shift: Скорость движения камеры.
         """
         self.animate()
-        self.rect.x += x_shift 
+        self.rect.x += x_shift

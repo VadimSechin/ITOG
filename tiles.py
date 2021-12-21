@@ -1,6 +1,7 @@
 import pygame
 from support import import_folder
 
+
 class Tile(pygame.sprite.Sprite):
     """
     block class (general)
@@ -15,10 +16,11 @@ class Tile(pygame.sprite.Sprite):
         Координаты верхней левой вершины.
 
     """
+
     def __init__(self, size, x, y):
         super().__init__()
         self.image = pygame.Surface((size, size))
-        self.rect = self.image.get_rect(topleft = (x, y))
+        self.rect = self.image.get_rect(topleft=(x, y))
 
     def update(self, shift):
         """
@@ -26,7 +28,8 @@ class Tile(pygame.sprite.Sprite):
         :param shift: Скорость движения камеры.
         """
         self.rect.x += shift
-        
+
+
 class StaticTile(Tile):
     """
     fixed block class
@@ -37,10 +40,12 @@ class StaticTile(Tile):
     image : image
         Картинка неподвижного игрового блока.
     """
+
     def __init__(self, size, x, y, surface):
         super().__init__(size, x, y)
         self.image = surface
-    
+
+
 class Crate(StaticTile):
     """
     Box class
@@ -48,11 +53,13 @@ class Crate(StaticTile):
     rect : (int,int)
         Координаты левой нижней вершины коробки.
     """
+
     def __init__(self, size, x, y):
         super().__init__(size, x, y, pygame.image.load('./graphics/terrain/crate.png').convert_alpha())
         offset_y = y + size
-        self.rect = self.image.get_rect(bottomleft = (x, offset_y))
-        
+        self.rect = self.image.get_rect(bottomleft=(x, offset_y))
+
+
 class AnimatedTile(Tile):
     """
     class of moving elements of the level
@@ -69,12 +76,13 @@ class AnimatedTile(Tile):
     image : image
         Изображение соответсвующего номера
     """
+
     def __init__(self, size, x, y, path):
         super().__init__(size, x, y)
         self.frames = import_folder(path)
         self.frame_index = 0
         self.image = self.frames[self.frame_index]
-        
+
     def animate(self):
         """
         elements animation
@@ -93,6 +101,7 @@ class AnimatedTile(Tile):
         self.rect.x += shift
         self.animate()
 
+
 class Coin(AnimatedTile):
     """
     coins class
@@ -106,12 +115,14 @@ class Coin(AnimatedTile):
     value : int
         Номинал монетки.
     """
+
     def __init__(self, size, x, y, path, value):
         super().__init__(size, x, y, path)
         center_x = x + int(size / 2)
         center_y = y + int(size / 2)
-        self.rect = self.image.get_rect(center = (center_x, center_y))
+        self.rect = self.image.get_rect(center=(center_x, center_y))
         self.value = value
+
 
 class Palm(AnimatedTile):
     """
@@ -123,10 +134,8 @@ class Palm(AnimatedTile):
     rect : (int,int)
         Координаты левой верхней вершины.
     """
+
     def __init__(self, size, x, y, path, offset):
         super().__init__(size, x, y, path)
-        offset_y = y - offset # Разность нижней границы прямоугольника (tile) и картинки (image)
+        offset_y = y - offset  # Разность нижней границы прямоугольника (tile) и картинки (image)
         self.rect.topleft = (x, offset_y)
-
-
-            

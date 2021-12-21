@@ -4,8 +4,8 @@ Screen and block parameters
 """
 screen_width = 1200
 
-tile_size = 64 # Линейный размер игрового блока
+tile_size = 64  # Линейный размер игрового блока
 
-vertical_tile_number = 11 # Количество игровых блоков по вертикали
+vertical_tile_number = 11  # Количество игровых блоков по вертикали
 
-screen_height = vertical_tile_number * tile_size # Высота экрана
+screen_height = vertical_tile_number * tile_size  # Высота экрана
