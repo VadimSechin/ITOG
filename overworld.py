@@ -33,7 +33,7 @@ class Node(pygame.sprite.Sprite):
 
     def update(self):
         """
-        updates node
+        updates node. if open - animate, else - black
         """
         if self.status == 'available':
             self.animate()
