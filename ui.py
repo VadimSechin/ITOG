@@ -7,28 +7,20 @@ class UI:
 
     :parameters:
     -------------
-
     display_surface : surface
         Поверхность, на которой отображаются шкалы.
-
     health_bar : image
         Картинка школы здоровья.
-
     health_bar_topleft : (int,int)
         Координаты левой верхней вершины картинки шкалы здоровья.
-
     bar_max_width : int
         Ширина шкалы здоровья. (Максимальная длина красной полоски жизней)
-
     bar_height : int
         Высота шкалы здоровья.
-
     coin : image
         Картинка монетки.
-
     coin_rect : (int,int)
         Координаты верхней левой вершины картинки монетки.
-
     font : font
         Шрифт счётчика монеток.
     """
@@ -56,9 +48,9 @@ class UI:
         """
         self.display_surface.blit(self.health_bar, (20, 10))
         current_health_ratio = current / full
-        current_bar_width = self.bar_max_width * current_health_ratio
-        health_bar_rect = pygame.Rect(self.health_bar_topleft, (current_bar_width, self.bar_height))
-        pygame.draw.rect(self.display_surface, '#dc4949', health_bar_rect)
+        current_bar_width = self.bar_max_width * current_health_ratio #Текущая длина полоски жизни равна отношению чисел макс.длины к текущей.
+        health_bar_rect = pygame.Rect(self.health_bar_topleft, (current_bar_width, self.bar_height)) #Задаём положение шкалы здоровья
+        pygame.draw.rect(self.display_surface, '#dc4949', health_bar_rect) #Отрисовываем поверхность
 
     def show_coins(self, amount):
         """
@@ -66,6 +58,6 @@ class UI:
         :param amount: Значение счётчика монеток. (1 золотая = 5 серебряным)
         """
         self.display_surface.blit(self.coin, self.coin_rect)
-        coin_amount_surf = self.font.render(str(amount), False, '#33323d')
-        coin_amount_rect = coin_amount_surf.get_rect(midleft=(self.coin_rect.right + 4, self.coin_rect.centery))
-        self.display_surface.blit(coin_amount_surf, coin_amount_rect)
+        coin_amount_surf = self.font.render(str(amount), False, '#33323d') #Задаём количество, отменяем выравнивание, задаём цвет.
+        coin_amount_rect = coin_amount_surf.get_rect(midleft=(self.coin_rect.right + 4, self.coin_rect.centery)) #Задаём положение счётчика монеток
+        self.display_surface.blit(coin_amount_surf, coin_amount_rect) #Отрисовываем поверхность

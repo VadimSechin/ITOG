@@ -9,13 +9,10 @@ class Enemy(AnimatedTile):
 
     :parameters :
     ------------
-
     rect.y : int
         Положение врага по вертикали.
-
     rect.x : int
         Положение врага по горизотали.
-
     speed : int
         Скорость врага.
     """
@@ -47,6 +44,7 @@ class Enemy(AnimatedTile):
     def update(self, shift):
         """
         updating parameters
+        Описываем движение врага при движении камеры.
         :param shift: Скорость движения камеры.
         """
 

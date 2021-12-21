@@ -26,14 +26,14 @@ class ParticleEffect(pygame.sprite.Sprite):
     """
 
     def __init__(self, pos, type):
-        super().__init__()
+        super().__init__() #Метод наследования (наследует все методы предка)
         self.frame_index = 0
         self.animation_speed = 0.5
         if type == 'jump':
             self.frames = import_folder('./graphics/character/dust_particles/jump')
         if type == 'land':
             self.frames = import_folder('./graphics/character/dust_particles/land')
-        if type == 'explosion':
+        if type == 'explosion': #Взрыв (при убийстве противника)
             self.frames = import_folder('./graphics/enemy/explosion')
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center=pos)
@@ -43,7 +43,7 @@ class ParticleEffect(pygame.sprite.Sprite):
         effect animation
         """
         self.frame_index += self.animation_speed
-        if self.frame_index >= len(self.frames):
+        if self.frame_index >= len(self.frames): #Вызывается один раз и выполняется один раз
             self.kill()
         else:
             self.image = self.frames[int(self.frame_index)]
@@ -53,5 +53,5 @@ class ParticleEffect(pygame.sprite.Sprite):
         updating parameters
         :param x_shift: Скорость движения камеры.
         """
-        self.animate()
+        self.animate() #Связано с движением камеры
         self.rect.x += x_shift

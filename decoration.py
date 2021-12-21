@@ -12,25 +12,18 @@ class Sky:
 
     :parameters :
     -----------
-
     horizon : int
-        y-ковая координата линии горизонта.
-
+        y-ковая координата линии горизонта(линии, с которой задний фон меняется).
     top : image
         Картинка верхней части неба.
-
     bottom : image
         Картинка нижней части неба.
-
     middle : image
         Картинка средней части неба (изображение горизонта).
-
     style : str
         Некоторый ключ в библиотеке.
-
     palms : list
         Список картинок пальм с соответствующими координатами.
-
     clouds : list
         Спикок картинок облаков с соответсвующими координатами.
     """
@@ -41,13 +34,13 @@ class Sky:
         self.bottom = pygame.image.load('./graphics/decoration/sky/sky_bottom.png').convert()
         self.middle = pygame.image.load('./graphics/decoration/sky/sky_middle.png').convert()
 
-        # stretch
+        # stretch, растягиваем квадратик в полоску.
         self.top = pygame.transform.scale(self.top, (screen_width, tile_size))
         self.bottom = pygame.transform.scale(self.bottom, (screen_width, tile_size))
         self.middle = pygame.transform.scale(self.middle, (screen_width, tile_size))
 
         self.style = style
-        if self.style == 'overworld':
+        if self.style == 'overworld': #создаём фон карты уровней (поверхность)
             palm_surfaces = import_folder('./graphics/overworld/palms')
             self.palms = []
 
@@ -69,7 +62,7 @@ class Sky:
     def draw(self, surface):
         """
         drawing objects
-
+        Отрисовываем фон
         :param surface: Картинка, которую функция отображает.
         """
         for row in range(vertical_tile_number):
@@ -103,7 +96,7 @@ class Water:
         tile_x_amount = (level_width + screen_width * 2) / water_tile_width
         self.water_sprites = pygame.sprite.Group()
 
-        for tile in range(int(tile_x_amount)):
+        for tile in range(int(tile_x_amount)): #Создаём меняющуюся спрайт-группу воды, блоки которой склеены.
             x = tile * water_tile_width + water_start
             y = top
             sprite = AnimatedTile(192, x, y, './graphics/decoration/water')
@@ -112,6 +105,7 @@ class Water:
     def draw(self, surface, shift):
         """
         drawing objects
+        Отрисовываем спрайт-группу воды при движении камеры.
         :param surface: Картинка, которую функция отображает.
         :param shift: Скорость движения камеры.
         """
@@ -125,7 +119,6 @@ class Clouds:
 
     :parameters :
     --------------
-
     cloud_sprites : Group
         Спрайт-группа облаков
     """
@@ -138,7 +131,7 @@ class Clouds:
         max_y = horison
         self.cloud_sprites = pygame.sprite.Group()
 
-        for cloud in range(cloud_number):
+        for cloud in range(cloud_number): #Выбираем одну картинку, для неё выбираем координаты и рисуем облако.
             cloud = choice(cloud_surf_list)
             x = randint(min_x, max_x)
             y = randint(min_y, max_y)
@@ -148,6 +141,7 @@ class Clouds:
     def draw(self, surface, shift):
         """
         drawing objects
+        Отрисовываем спрайт-группу облаков при движении камеры.
         :param surface: Картинка, которую функция отображает.
         :param shift: Скорость движения камеры.
         """
